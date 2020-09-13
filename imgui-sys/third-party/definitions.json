@@ -1,14 +1,10 @@
 {
   "ImColor_HSV": [
     {
-      "args": "(ImColor *pOut,ImColor* self,float h,float s,float v,float a)",
+      "args": "(ImColor *pOut,float h,float s,float v,float a)",
       "argsT": [
         {
           "name": "pOut",
-          "type": "ImColor*"
-        },
-        {
-          "name": "self",
           "type": "ImColor*"
         },
         {
@@ -35,6 +31,7 @@
         "a": "1.0f"
       },
       "funcname": "HSV",
+      "is_static_function": true,
       "location": "imgui",
       "nonUDT": 1,
       "ov_cimguiname": "ImColor_HSV",
@@ -6800,7 +6797,7 @@
       "location": "imgui",
       "ov_cimguiname": "ImVector_swap",
       "ret": "void",
-      "signature": "(ImVector)",
+      "signature": "(ImVector*)",
       "stname": "ImVector",
       "templated": true
     }
@@ -7864,7 +7861,7 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igColorConvertHSVtoRGB",
       "ret": "void",
-      "signature": "(float,float,float,float,float,float)",
+      "signature": "(float,float,float,float*,float*,float*)",
       "stname": ""
     }
   ],
@@ -7909,7 +7906,7 @@
       "namespace": "ImGui",
       "ov_cimguiname": "igColorConvertRGBtoHSV",
       "ret": "void",
-      "signature": "(float,float,float,float,float,float)",
+      "signature": "(float,float,float,float*,float*,float*)",
       "stname": ""
     }
   ],
@@ -14294,6 +14291,30 @@
       "ov_cimguiname": "igSetTabItemClosed",
       "ret": "void",
       "signature": "(const char*)",
+      "stname": ""
+    }
+  ],
+  "igSetTextureCallback": [
+    {
+      "args": "(ImGuiTextureCallback cb)",
+      "argsT": [
+        {
+          "name": "cb",
+          "type": "ImGuiTextureCallback"
+        }
+      ],
+      "argsoriginal": "(ImGuiTextureCallback cb=((void*)0))",
+      "call_args": "(cb)",
+      "cimguiname": "igSetTextureCallback",
+      "defaults": {
+        "cb": "((void*)0)"
+      },
+      "funcname": "SetTextureCallback",
+      "location": "imgui",
+      "namespace": "ImGui",
+      "ov_cimguiname": "igSetTextureCallback",
+      "ret": "void",
+      "signature": "(ImGuiTextureCallback)",
       "stname": ""
     }
   ],

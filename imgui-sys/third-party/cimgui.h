@@ -41,9 +41,9 @@ typedef unsigned __int64 ImU64;
 
 
 #ifdef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+typedef struct ImFontAtlasCustomRect ImFontAtlasCustomRect;
 typedef struct ImGuiStoragePair ImGuiStoragePair;
 typedef struct ImGuiTextRange ImGuiTextRange;
-typedef struct ImFontAtlasCustomRect ImFontAtlasCustomRect;
 typedef struct ImVec4 ImVec4;
 typedef struct ImVec2 ImVec2;
 typedef struct ImGuiTextFilter ImGuiTextFilter;
@@ -125,6 +125,7 @@ typedef void* ImTextureID;
 typedef unsigned int ImGuiID;
 typedef int (*ImGuiInputTextCallback)(ImGuiInputTextCallbackData *data);
 typedef void (*ImGuiSizeCallback)(ImGuiSizeCallbackData* data);
+typedef void (*ImGuiTextureCallback)(ImTextureID texture);
 typedef unsigned short ImWchar16;
 typedef unsigned int ImWchar32;
 typedef ImWchar16 ImWchar;
@@ -139,23 +140,23 @@ typedef uint64_t ImU64;
 typedef void (*ImDrawCallback)(const ImDrawList* parent_list, const ImDrawCmd* cmd);
 typedef unsigned short ImDrawIdx;
 typedef struct ImVector{int Size;int Capacity;void* Data;} ImVector;
-typedef struct ImVector_float {int Size;int Capacity;float* Data;} ImVector_float;
-typedef struct ImVector_ImWchar {int Size;int Capacity;ImWchar* Data;} ImVector_ImWchar;
-typedef struct ImVector_ImDrawVert {int Size;int Capacity;ImDrawVert* Data;} ImVector_ImDrawVert;
-typedef struct ImVector_ImFontGlyph {int Size;int Capacity;ImFontGlyph* Data;} ImVector_ImFontGlyph;
-typedef struct ImVector_ImGuiTextRange {int Size;int Capacity;ImGuiTextRange* Data;} ImVector_ImGuiTextRange;
-typedef struct ImVector_ImGuiStoragePair {int Size;int Capacity;ImGuiStoragePair* Data;} ImVector_ImGuiStoragePair;
 typedef struct ImVector_ImDrawChannel {int Size;int Capacity;ImDrawChannel* Data;} ImVector_ImDrawChannel;
-typedef struct ImVector_char {int Size;int Capacity;char* Data;} ImVector_char;
-typedef struct ImVector_ImU32 {int Size;int Capacity;ImU32* Data;} ImVector_ImU32;
-typedef struct ImVector_ImFontAtlasCustomRect {int Size;int Capacity;ImFontAtlasCustomRect* Data;} ImVector_ImFontAtlasCustomRect;
-typedef struct ImVector_ImTextureID {int Size;int Capacity;ImTextureID* Data;} ImVector_ImTextureID;
-typedef struct ImVector_ImFontConfig {int Size;int Capacity;ImFontConfig* Data;} ImVector_ImFontConfig;
-typedef struct ImVector_ImFontPtr {int Size;int Capacity;ImFont** Data;} ImVector_ImFontPtr;
 typedef struct ImVector_ImDrawCmd {int Size;int Capacity;ImDrawCmd* Data;} ImVector_ImDrawCmd;
-typedef struct ImVector_ImVec4 {int Size;int Capacity;ImVec4* Data;} ImVector_ImVec4;
 typedef struct ImVector_ImDrawIdx {int Size;int Capacity;ImDrawIdx* Data;} ImVector_ImDrawIdx;
+typedef struct ImVector_ImDrawVert {int Size;int Capacity;ImDrawVert* Data;} ImVector_ImDrawVert;
+typedef struct ImVector_ImFontPtr {int Size;int Capacity;ImFont** Data;} ImVector_ImFontPtr;
+typedef struct ImVector_ImFontAtlasCustomRect {int Size;int Capacity;ImFontAtlasCustomRect* Data;} ImVector_ImFontAtlasCustomRect;
+typedef struct ImVector_ImFontConfig {int Size;int Capacity;ImFontConfig* Data;} ImVector_ImFontConfig;
+typedef struct ImVector_ImFontGlyph {int Size;int Capacity;ImFontGlyph* Data;} ImVector_ImFontGlyph;
+typedef struct ImVector_ImGuiStoragePair {int Size;int Capacity;ImGuiStoragePair* Data;} ImVector_ImGuiStoragePair;
+typedef struct ImVector_ImGuiTextRange {int Size;int Capacity;ImGuiTextRange* Data;} ImVector_ImGuiTextRange;
+typedef struct ImVector_ImTextureID {int Size;int Capacity;ImTextureID* Data;} ImVector_ImTextureID;
+typedef struct ImVector_ImU32 {int Size;int Capacity;ImU32* Data;} ImVector_ImU32;
 typedef struct ImVector_ImVec2 {int Size;int Capacity;ImVec2* Data;} ImVector_ImVec2;
+typedef struct ImVector_ImVec4 {int Size;int Capacity;ImVec4* Data;} ImVector_ImVec4;
+typedef struct ImVector_ImWchar {int Size;int Capacity;ImWchar* Data;} ImVector_ImWchar;
+typedef struct ImVector_char {int Size;int Capacity;char* Data;} ImVector_char;
+typedef struct ImVector_float {int Size;int Capacity;float* Data;} ImVector_float;
 
 struct ImVec2
 {
@@ -720,6 +721,11 @@ struct ImGuiTextFilter
     ImVector_ImGuiTextRange Filters;
     int CountGrep;
 };
+struct ImGuiTextRange
+{
+        const char* b;
+        const char* e;
+};
 struct ImGuiTextBuffer
 {
     ImVector_char Buf;
@@ -727,6 +733,11 @@ struct ImGuiTextBuffer
 struct ImGuiStorage
 {
     ImVector_ImGuiStoragePair Data;
+};
+struct ImGuiStoragePair
+{
+        ImGuiID key;
+        union { int val_i; float val_f; void* val_p; };
 };
 struct ImGuiListClipper
 {
@@ -899,16 +910,6 @@ struct ImFont
     int MetricsTotalSurface;
     ImU8 Used4kPagesMap[(0xFFFF +1)/4096/8];
 };
-struct ImGuiTextRange
-{
-        const char* b;
-        const char* e;
-};
-struct ImGuiStoragePair
-{
-        ImGuiID key;
-        union { int val_i; float val_f; void* val_p; };
-};
 #else
 struct GLFWwindow;
 struct SDL_Window;
@@ -918,23 +919,23 @@ typedef union SDL_Event SDL_Event;
 #ifndef CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 typedef ImGuiStorage::ImGuiStoragePair ImGuiStoragePair;
 typedef ImGuiTextFilter::ImGuiTextRange ImGuiTextRange;
-typedef ImVector<float> ImVector_float;
-typedef ImVector<ImWchar> ImVector_ImWchar;
-typedef ImVector<ImDrawVert> ImVector_ImDrawVert;
-typedef ImVector<ImFontGlyph> ImVector_ImFontGlyph;
-typedef ImVector<ImGuiTextRange> ImVector_ImGuiTextRange;
-typedef ImVector<ImGuiStoragePair> ImVector_ImGuiStoragePair;
 typedef ImVector<ImDrawChannel> ImVector_ImDrawChannel;
-typedef ImVector<char> ImVector_char;
-typedef ImVector<ImU32> ImVector_ImU32;
-typedef ImVector<ImFontAtlasCustomRect> ImVector_ImFontAtlasCustomRect;
-typedef ImVector<ImTextureID> ImVector_ImTextureID;
-typedef ImVector<ImFontConfig> ImVector_ImFontConfig;
-typedef ImVector<ImFont*> ImVector_ImFontPtr;
 typedef ImVector<ImDrawCmd> ImVector_ImDrawCmd;
-typedef ImVector<ImVec4> ImVector_ImVec4;
 typedef ImVector<ImDrawIdx> ImVector_ImDrawIdx;
+typedef ImVector<ImDrawVert> ImVector_ImDrawVert;
+typedef ImVector<ImFont*> ImVector_ImFontPtr;
+typedef ImVector<ImFontAtlasCustomRect> ImVector_ImFontAtlasCustomRect;
+typedef ImVector<ImFontConfig> ImVector_ImFontConfig;
+typedef ImVector<ImFontGlyph> ImVector_ImFontGlyph;
+typedef ImVector<ImGuiStoragePair> ImVector_ImGuiStoragePair;
+typedef ImVector<ImGuiTextRange> ImVector_ImGuiTextRange;
+typedef ImVector<ImTextureID> ImVector_ImTextureID;
+typedef ImVector<ImU32> ImVector_ImU32;
 typedef ImVector<ImVec2> ImVector_ImVec2;
+typedef ImVector<ImVec4> ImVector_ImVec4;
+typedef ImVector<ImWchar> ImVector_ImWchar;
+typedef ImVector<char> ImVector_char;
+typedef ImVector<float> ImVector_float;
 #endif //CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 CIMGUI_API ImVec2* ImVec2_ImVec2Nil(void);
 CIMGUI_API void ImVec2_destroy(ImVec2* self);
@@ -952,6 +953,7 @@ CIMGUI_API void igNewFrame(void);
 CIMGUI_API void igEndFrame(void);
 CIMGUI_API void igRender(void);
 CIMGUI_API ImDrawData* igGetDrawData(void);
+CIMGUI_API void igSetTextureCallback(ImGuiTextureCallback cb);
 CIMGUI_API void igShowDemoWindow(bool* p_open);
 CIMGUI_API void igShowAboutWindow(bool* p_open);
 CIMGUI_API void igShowMetricsWindow(bool* p_open);
@@ -1365,7 +1367,7 @@ CIMGUI_API ImColor* ImColor_ImColorU32(ImU32 rgba);
 CIMGUI_API ImColor* ImColor_ImColorFloat(float r,float g,float b,float a);
 CIMGUI_API ImColor* ImColor_ImColorVec4(const ImVec4 col);
 CIMGUI_API void ImColor_SetHSV(ImColor* self,float h,float s,float v,float a);
-CIMGUI_API void ImColor_HSV(ImColor *pOut,ImColor* self,float h,float s,float v,float a);
+CIMGUI_API void ImColor_HSV(ImColor *pOut,float h,float s,float v,float a);
 CIMGUI_API ImDrawCmd* ImDrawCmd_ImDrawCmd(void);
 CIMGUI_API void ImDrawCmd_destroy(ImDrawCmd* self);
 CIMGUI_API ImDrawListSplitter* ImDrawListSplitter_ImDrawListSplitter(void);

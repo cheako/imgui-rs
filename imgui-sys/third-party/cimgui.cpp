@@ -2,6 +2,9 @@
 //based on imgui.h file version "1.77" from Dear ImGui https://github.com/ocornut/imgui
 
 #include "./imgui/imgui.h"
+#ifdef CIMGUI_FREETYPE
+#include "./imgui/misc/freetype/imgui_freetype.h"
+#endif
 #include "./imgui/imgui_internal.h"
 #include "cimgui.h"
 
@@ -70,6 +73,10 @@ CIMGUI_API void igRender()
 CIMGUI_API ImDrawData* igGetDrawData()
 {
     return ImGui::GetDrawData();
+}
+CIMGUI_API void igSetTextureCallback(ImGuiTextureCallback cb)
+{
+    return ImGui::SetTextureCallback(cb);
 }
 CIMGUI_API void igShowDemoWindow(bool* p_open)
 {
@@ -1760,9 +1767,9 @@ CIMGUI_API void ImColor_SetHSV(ImColor* self,float h,float s,float v,float a)
 {
     return self->SetHSV(h,s,v,a);
 }
-CIMGUI_API void ImColor_HSV(ImColor *pOut,ImColor* self,float h,float s,float v,float a)
+CIMGUI_API void ImColor_HSV(ImColor *pOut,float h,float s,float v,float a)
 {
-    *pOut = self->HSV(h,s,v,a);
+    *pOut = ImColor::HSV(h,s,v,a);
 }
 CIMGUI_API ImDrawCmd* ImDrawCmd_ImDrawCmd(void)
 {

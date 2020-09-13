@@ -123,6 +123,7 @@ pub type ImGuiTabItemFlags = ::std::os::raw::c_int;
 pub type ImGuiTreeNodeFlags = ::std::os::raw::c_int;
 pub type ImGuiWindowFlags = ::std::os::raw::c_int;
 pub type ImTextureID = *mut ::std::os::raw::c_void;
+pub type ImTextureCallback = ::std::option::Option<unsafe extern "C" fn(id: ImTextureID)>;
 pub type ImGuiID = ::std::os::raw::c_uint;
 pub type ImGuiInputTextCallback = ::std::option::Option<
     unsafe extern "C" fn(data: *mut ImGuiInputTextCallbackData) -> ::std::os::raw::c_int,
@@ -5235,6 +5236,9 @@ extern "C" {
 }
 extern "C" {
     pub fn igGetDrawData() -> *mut ImDrawData;
+}
+extern "C" {
+    pub fn igSetTextureCallback(cb: ImTextureCallback);
 }
 extern "C" {
     pub fn igShowDemoWindow(p_open: *mut bool);
