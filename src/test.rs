@@ -3,7 +3,7 @@ use std::ptr;
 
 use crate::context::Context;
 
-lazy_static! {
+lazy_static::lazy_static! {
     pub static ref TEST_MUTEX: ReentrantMutex<()> = ReentrantMutex::new(());
 }
 

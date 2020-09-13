@@ -1,6 +1,4 @@
-pub extern crate imgui_sys as sys;
-#[macro_use]
-extern crate lazy_static;
+pub use sys;
 
 use std::cell;
 use std::ffi::CStr;

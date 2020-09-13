@@ -59,7 +59,7 @@ pub struct Context {
     clipboard_ctx: Option<Box<ClipboardContext>>,
 }
 
-lazy_static! {
+lazy_static::lazy_static! {
     // This mutex needs to be used to guard all public functions that can affect the underlying
     // Dear ImGui active context
     static ref CTX_MUTEX: ReentrantMutex<()> = ReentrantMutex::new(());
